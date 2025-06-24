@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -28,7 +29,7 @@ class ProductsController extends Controller
 
         }
 
-        $cart = session()->get('cart');
+        $cart = session()->get('cart'.Auth::id());
 
         // if cart is empty then this the first product
         if(!$cart) {

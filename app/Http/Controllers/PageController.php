@@ -12,6 +12,7 @@ use App\Models\Bill_detail;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Cart_detail;
 use App\Models\NguoiDung;
 use App\Login;
 use Illuminate\Support\Facades\DB;
@@ -74,15 +75,26 @@ class PageController extends Controller
     }
 
     public function getAddtoCart(Request $req,$id){
-        $product = Product::find($id);
-        $oldCart = Session('cart')?Session::get('cart'):null;
-        $cart = new Cart($oldCart);
-        $product['qty'] = $req->soluong;
-        dd($req);
-        $cart->add($product, $id);
+        // $totalPrice = 0;
+        // foreach ($cart->items as $item) {
+        //     $totalPrice += $item['price'];
+        // }
         
-        $req->session()->put('cart',$cart);
-        return redirect()->back();
+        $cart = new Cart;
+        $cart->id = $cart->id;
+        $cart->tongtien = '';
+        $cart->discount = !empty($req->discount) ? $req->discount : 0;
+        $cart->user_id = Auth::user()->id;
+        $cart->save();
+
+        foreach ($cart->items as $key => $value) {
+            $cart = new Cart_detail;
+            $cart->cart_id = $cart->id;
+            $cart->product_id = $req->product_id;
+            $cart->quantity = $value['qty'];
+            $cart->save();
+        }
+        return redirect()->back()->with('thongbao','Đặt hàng thành công');
     }
     public function postAddtoCart(Request $req,$id){
         $product = Product::find($id);
@@ -119,6 +131,11 @@ class PageController extends Controller
 
     public function postCheckout(Request $req){
         $cart = Session::get('cart');
+        $totalPrice = 0;
+        foreach ($cart->items as $item) {
+            $totalPrice += $item['price'];
+        }
+        
         $customer = new Customer;
         $customer->name = $req->name;
         $customer->gender = $req->gender;
@@ -131,7 +148,7 @@ class PageController extends Controller
         $bill = new Bill;
         $bill->id_customer = $customer->id;
         $bill->date_order = date('Y-m-d');
-        $bill->total = $cart->totalPrice;
+        $bill->total = $totalPrice;
         $bill->payment = $req->payment_method;
         $bill->note = $req->notes;
         $bill->save();
@@ -157,8 +174,17 @@ class PageController extends Controller
     }
 
     public function getSearch(Request $request){
-        $product=Product::where('name','like','%'.$request->key.'%')
-       ->orWhere('price',$request->key)->get();
+        $query = Product::query();
+
+    if ($request->name) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    if ($request->price) {
+        $query->where('price', '<=', $request->price);
+    }
+
+    $product = $query->get();
         return view('users.page.search',compact('product'));
 
     }
@@ -209,12 +235,12 @@ class PageController extends Controller
             //'trangthai'   =>"active"
         ];
         if (Auth::attempt($login)) {
-            // $user = Auth::user();
-            // if ($user->trangthai == 'active') {
-                return redirect('/')->with('name');
-            // } else {
-            //     return redirect()->back()->with('status', 'Tài khoản chưa được duyệt hoặc không tồn tại');
-            // }
+            $user = Auth::user();
+            if ($user->loaitaikhoan == 'admin') {
+                return redirect()->route('welcome'); // Trang admin
+            } else {
+                return redirect()->route('trang-chu'); // Trang người dùng
+            }
         } else {
             return redirect()->back()->with('status', 'Email hoặc Password không chính xác');
         }

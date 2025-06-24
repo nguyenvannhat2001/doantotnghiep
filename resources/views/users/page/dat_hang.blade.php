@@ -29,7 +29,11 @@
                     <label for="name">Họ tên*</label>
                     <input type="text" name="name" placeholder="Họ tên" value="{{Auth::user()->name}}">
                 </div>
-
+<div class="form-group">
+    <label for="gender">Giới tính*</label><br>
+    <input type="radio" name="gender" value="male" required> Nam
+    <input type="radio" name="gender" value="female" required> Nữ
+</div>
 
                 <div class="form-block">
                     <label for="email">Email*</label>
@@ -48,8 +52,8 @@
                 </div>
 
                 <div class="form-block">
-                    <label for="notes">Ghi chú</label>
-                    <textarea id="notes" name="notes"></textarea>
+                    <label for="notes">Ghi chú*</label>
+                    <textarea id="notes" name="notes" required></textarea>
                 </div>
             </div>
             <div class="col-sm-6">

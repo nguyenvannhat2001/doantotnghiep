@@ -6,22 +6,21 @@
 
     <thead>
         <th>Họ Tên KH</th>
-        <th>Email</th>
         <th>Địa Chỉ</th>
         <th>SDT</th>
         <th>Ngày Lập</th>
         <th>Tổng tiền</th>
+        <th>Tình trạng</th>
     </thead>
       <tbody>
         @foreach($donhang ?? '' as $dh )
           <tr>
             <td>{{$dh->name}} </td>
-            <td>{{$dh->email}} </td>
             <td>{{$dh->address}} </td>
             <td>{{$dh->phone_number}}</td>
             <td>{{$dh->created_at}}</td>
-            <td>{{$dh->total}}</td>
-            <td>
+            <td></td>
+            <td></td>
           </tr>
         @endforeach
       </tbody>

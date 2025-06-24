@@ -3,10 +3,11 @@
         <div class="container">
             <div class="pull-left auto-width-left">
                 <ul class="l-inline ov">
-                    <li> <form role="search" method="get" id="searchform" action="{{route('search')}}">
-                        <input type="text"  name="key" placeholder="Nhập từ khóa..." />
-                     <button class="fa fa-search" name="submit" type="submit" id="searchsubmit"></button>
-                        </form>
+                    <li> <form method="get" id="searchform" action="{{ route('search') }}" style="display: flex; gap: 5px;">
+    <input type="text" name="name" placeholder="Tìm theo tên..." style="padding: 5px;">
+    <input type="number" name="price" placeholder="Tìm giá nhỏ hơn..." style="padding: 5px; width: 130px;">
+    <button class="fa fa-search" name="submit" type="submit" id="searchsubmit"></button>
+</form>
                  </li>
                 </ul>
             </div>
@@ -22,9 +23,13 @@
                 @endif
 
                 <li>
+                    @if(Auth::check()) 
                     <a href="{{route('giohang')}}">
-                    <i class="fa fa-shopping-cart" style="font-size:30px;color:rgb(255, 145, 0)"></i>(@if(Session::has('cart')){{Session('cart')->totalQty}}@else 0 @endif)</a>
+                    <i class="fa fa-shopping-cart" style="font-size:30px;color:rgb(255, 145, 0)"></i>
+                    (@if(count($product_cart) > 0){{count($product_cart)}}@else 0 @endif)
+                    </a>
                    </li>
+                   @endif
 
                    <li><a href="{{route('donhang')}}"><b>Đơn Hàng</b></a></li>
 

@@ -20,8 +20,7 @@ class CheckNguoiDung
         {
 
             $user = Auth::user();
-            // nếu level =1 (admin), status = 1 (actived) thì cho qua.
-            // if ($user->trangthai == "active" && $user->loaitaikhoan == 'user')
+           
             if ( $user->loaitaikhoan == 'user')
             {
                 return $next($request);
@@ -32,7 +31,7 @@ class CheckNguoiDung
                 return redirect()->route('getLogin');
             }
         } else
-            return redirect('/dang-nhap');
+            return redirect('/dang-nhap')->with('warning', 'Vui lòng đăng nhập.');
     }
 
 }

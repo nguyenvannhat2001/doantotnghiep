@@ -13,6 +13,7 @@ Route::group(['prefix' => 'panel', 'namespace' => 'admin'], function() {
     Route::get('logout','LoginController@getLogout')->name('getLogout');
     Route::get('register','LoginController@getDangKy')->name('getdangky');
     Route::post('register','LoginController@postDangKy')->name('postdangky');
+
 });
 
 Route::group(['middleware' => 'CheckAdminLogin','prefix' => 'panel'], function() {
@@ -41,6 +42,12 @@ Route::group(['middleware' => 'CheckAdminLogin','prefix' => 'panel','namespace' 
 	Route::get('category/productlist/{id}', 'CategoryController@productlist')->name('category.productlist');
     Route::resource('categoryNews',CategoryNews::class);
     Route::resource('binhluan',BinhLuanController::class);
+	Route::get('hoadon', 'HoaDonController@index')->name('hoadon');
+	Route::get('chitiethoadon/{id}', 'HoaDonController@getEdit')->name('chitiethoadon');
+	Route::get('duyethoadon/{id}', 'HoaDonController@approve')->name('duyethoadon');
+	Route::get('xoahoadon/{id}', 'HoaDonController@delete')->name('xoahoadon');
+
+
 });
 
 Route::group(['prefix' => 'product', 'namespace' => 'FrontEnd'], function() {
@@ -55,12 +62,12 @@ Route::delete('remove-from-cart', 'ProductsController@remove');
 
 
 
-Route::get('search','PageController@getSearch');
+Route::get('search','PageController@getSearch')->name('search');
 Route::get('/','PageController@getIndex')->name('trang-chu');
 Route::get('loai-san-pham/{type}','PageController@getLoaiSp')->name('loaisanpham');
-Route::get('chi-tiet-san-pham/{id}','PageController@getChitiet')->name('chitietsanpham');
+Route::get('chi-tiet-san-pham/{id}', 'PageController@getChitiet')->middleware('CheckNguoiDung')->name('chitietsanpham');
 Route::post('chi-tiet-san-pham/{id}','PageController@postComment')->name('chitietsanpham');
-Route::get('lien-he','PageController@getLienHe')->name('lienhe');
+Route::post('lien-he','PageController@getLienHe')->name('lienhe');
 Route::get('gioi-thieu','PageController@getGioiThieu')->name('gioithieu');
 Route::get('giohang','PageController@getGioHang')->name('giohang');
 Route::get('add-to-cart/{id}',['middleware' => 'CheckNguoiDung','uses'=>'PageController@getAddtoCart'])->name('themgiohang');

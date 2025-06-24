@@ -23,4 +23,4 @@
 </div>
           <button type="submit" name="btnregister"class="btn btn-primary">Thực Hiện</button>
         </form>
-<@stop
+@stop

@@ -19,7 +19,6 @@
     <th>Content</th>
     <th>View product</th>
     <th>Edit</th>
-    <th>Lock</th>
     <th>Delete</th>
   </thead>
   <tbody>
@@ -31,7 +30,6 @@
         <td>{!!$category->content!!} </td>
         <td><a href="{{route('category.productlist', $category->id)}}" class="btn btn-outline-primary"><i class="fa fa-eye"></i></a></td>
         <td><a href="{{route('category.edit', $category->id)}}" class="btn btn-primary"><i class="fa fa-edit"></i></a></td>
-        <td><a href="" class="btn btn-warning"><i class="fa fa-lock"></i></a></td>
         <td>
         <form action="{{route('category.destroy', $category->id)}}" method="POST">
         @csrf

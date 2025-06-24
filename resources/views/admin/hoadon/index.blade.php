@@ -1,39 +1,43 @@
 @extends('admin.theme.layout')
 @section('content')
-<div id="content">
-    @if(Session::has('message'))
-    <div class="alert alert-success">
-      {{ Session::get('message') }}
-    </div>
-    @endif
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <a href="{{ url(Request::route()->getPrefix()) }}" class="btn btn-primary">Quản lý</a>
-    </div>
-</div>
-<table  class="table table-bordered" style="margin-top:20px;">
-  <thead>
-    <th>Image</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Content</th>
-    <th>View product</th>
-    <th>Edit</th>
-    <th>Lock</th>
-    <th>Delete</th>
-  </thead>
-  <tbody>
-    @foreach($cate ?? '' as $category)
-      <tr>
-        <td><img src="{{asset('images/'. $category->image)}}" width="60px" /></td>
-        <td>{{$category->name}} </td>
-        <td>{{$category->description}} </td>
-        <td>{{$category->content}} </td>
-        <td><a href="" class="btn btn-warning"><i class="fa fa-lock"></i></a></td>
-        <td>
-      </tr>
-      @endforeach
-  </tbody>
-</table>
-@stop
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quis ullam nulla sit tempora incidunt pariatur consequatur unde quisquam nisi ipsum impedit recusandae, voluptatum earum asperiores temporibus iste. Assumenda, est.
+<div class="container mt-4">
+    <h3>Danh sách hóa đơn</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Ghi chú</th>
+                <th>Thanh toán</th>
+                <th>Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($hoadon as $bill)
+            <tr>
+                <td>{{ $bill->id }}</td>
+                <td>{{ $bill->customer->name ?? 'Không rõ' }}</td>
+                <td>{{ $bill->date_order }}</td>
+                <td>{{ number_format($bill->total) }} đ</td>
+                <td>{{ $bill->payment }}</td>
+                <td class="d-flex align-items-center justify-content-center">
+                    <a href="{{route('chitiethoadon',$bill->id)}}" class="btn" type="button">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    @if($bill->status == 0)
+                    <a href="{{route('duyethoadon',$bill->id)}}" class="btn" type="button">
+                        <i class="fa fa-check"></i>
+                    </a>
+                    @endif
+                     <a href="{{route('xoahoadon',$bill->id)}}" class="btn" type="button">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                <td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    </div>
+@endsection

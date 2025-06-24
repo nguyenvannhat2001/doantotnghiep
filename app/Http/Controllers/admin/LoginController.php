@@ -22,16 +22,26 @@ class LoginController extends Controller
     }
     public function postLogin(request $request)
     {
-        $login = [
-            'email' => $request->txtEmail,
-            'password' => $request->txtPassword,
-            'trangthai'    =>"active"
-        ];
-        if (Auth::attempt($login)) {
-        return redirect('panel');
+        
+    $this->validate($request, [
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+
+        $user = Auth::user();
+
+        if ($user->loaitaikhoan == 'admin') {
+            return redirect()->route('welcome'); // Trang admin
         } else {
-            return redirect()->back()->with('status', 'Email hoặc Password không chính xác');
+            return redirect()->route('trangchu'); // Trang người dùng
         }
+    } else {
+        return redirect()->back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng']);
+    }
 
     }
 
@@ -51,11 +61,12 @@ class LoginController extends Controller
     {
         $this->validate($request,
         [
-            'trangthai'=>'required',
+            
             'email'=>'required|email|unique:users,email',
             'password'=>'required|min:6|max:20',
             'name'=>'required',
-            're_password'=>'required|same:password'
+            're_password'=>'required|same:password',
+             'loaitaikhoan' => 'required|in:admin,user',
         ],
         [
             'email.required'=>'Vui lòng nhập email',
@@ -69,7 +80,7 @@ class LoginController extends Controller
     $user->name = $request->name;
     $user->email = $request->email;
     $user->password = Hash::make($request->password);
-    $user->trangthai=$request->trangthai;
+    $user->loaitaikhoan=$request->loaitaikhoan;
     $user->save();
     return redirect()->back()->with('thanhcong','Tạo tài khoản thành công');
     }

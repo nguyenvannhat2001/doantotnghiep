@@ -9,18 +9,20 @@ class Cart extends Model
 {
     use HasFactory;
 
+	protected $table = "carts";
+
 
     public $items = null;
 	public $totalQty = 0;
 	public $totalPrice = 0;
 
-	public function __construct($oldCart){
-		if($oldCart){
-			$this->items = $oldCart->items;
-			$this->totalQty = $oldCart->totalQty;
-			$this->totalPrice = $oldCart->totalPrice;
-		}
-	}
+	// public function __construct($oldCart){
+	// 	if($oldCart){
+	// 		$this->items = $oldCart->items;
+	// 		$this->totalQty = $oldCart->totalQty;
+	// 		$this->totalPrice = $oldCart->totalPrice;
+	// 	}
+	// }
 
 	public function add($item, $id){
 		if($item->discount == 0){
@@ -35,7 +37,7 @@ class Cart extends Model
 			}
 		}
 		// $giohang['qty']++;
-		$giohang['qty'] = !empty($item['qty']) ? (int)$item['qty'] : $giohang['qty']++;
+		$giohang['qty'] = !empty($item['qty']) ? $giohang['qty'] + (int)$item['qty'] : $giohang['qty'] + 1;
 
 		if($item->discount == 0){
 			$giohang['price'] = $item->price * $giohang['qty'];

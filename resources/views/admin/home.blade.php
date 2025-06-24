@@ -74,7 +74,7 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Quản Lý Hóa Đơn</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-th"></i><a href="">Chi Tiết Hóa Đơn</a></li>
+                            <li><a href="{{route('hoadon.index')}}"><i class="fa fa-file-text"></i> Danh sách Hóa Đơn</a></li>
 
                         </ul>
                     </li>
