@@ -19,8 +19,12 @@
             <td>{{$dh->address}} </td>
             <td>{{$dh->phone_number}}</td>
             <td>{{$dh->created_at}}</td>
-            <td></td>
-            <td></td>
+            <td>{{number_format($dh->total)}}đ</td>
+            @if ($dh->status == 1)
+            <td>Đã duyệt</td>
+            @else
+            <td>Chưa duyệt</td>
+            @endif
           </tr>
         @endforeach
       </tbody>

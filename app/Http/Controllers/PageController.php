@@ -106,7 +106,7 @@ class PageController extends Controller
             $cart_detail->quantity = !empty($req->soluong) ? $req->soluong : 1;
             $cart_detail->save();
         }
-        $product->hang_ton_kho = $product->hang_ton_kho > 0 ? $product->hang_ton_kho - $req->soluong : 0;
+        // $product->hang_ton_kho = $product->hang_ton_kho > 0 ? $product->hang_ton_kho - $req->soluong : 0;
         $product->save();
         return redirect()->back()->with('thongbao','Đặt hàng thành công');
     }
@@ -136,7 +136,7 @@ class PageController extends Controller
             $cart_detail->save();
         }
 
-        $product->hang_ton_kho = $product->hang_ton_kho > 0 ? $product->hang_ton_kho - $req->soluong : 0;
+        // $product->hang_ton_kho = $product->hang_ton_kho > 0 ? $product->hang_ton_kho - $req->soluong : 0;
         $product->save();
         return redirect()->back()->with('thongbao','Đặt hàng thành công');
     }
@@ -230,8 +230,12 @@ class PageController extends Controller
         $query->where('name', 'like', '%' . $request->name . '%');
     }
 
-    if ($request->price) {
-        $query->where('price', '<=', $request->price);
+    if ($request->min_price) {
+        $query->where('price', '>=', $request->min_price);
+    }
+
+     if ($request->max_price) {
+        $query->where('price', '<=', $request->max_price);
     }
 
     $product = $query->get();
@@ -305,11 +309,26 @@ class PageController extends Controller
     {
         $user = Auth::user();
         $donhang = '';
-        $hd = '';
-        $bills = '';
+        $hd = [];
         // if ($user) { // $user->trangthai == 'active'
-            $donhang =Customer::all();
-            $hd=Bill_detail::all();
+            // $donhang =Customer::all();
+            $customers = Customer::where('email', $user->email)->get();
+            $customer_ids = Customer::select('id')->where('email', $user->email)->get()->toArray();
+            $cus_ids = [];
+            foreach ($customer_ids as $id) {
+                $cus_ids[] = $id['id'];
+            }
+            $bills = Bill::whereIn('id_customer',$customer_ids)->get();
+            $donhang = [];
+            foreach ($bills as $bill) {
+                $custumer = Customer::where('id', $bill->id_customer)->first();
+                $bill['name'] = $custumer->name;
+                $bill['address'] = $custumer->address;
+                $bill['phone_number'] = $custumer->phone_number;
+                $bill['created_at'] = $custumer->created_at;
+                $donhang[] = $bill;
+            }
+            // $hd=Bill_detail::all();
             // $bills = Bill::where('id_customer',$user->id)->get();
             // dd($bills);
         // }

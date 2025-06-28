@@ -1,31 +1,15 @@
-<style>
-    .container-header-top {
-        display: flex;
-        justify-content: space-between;
-        padding-left: 15%;
-        padding-right: 15%;
-    }
-    #searchsubmit {
-        position: relative !important;
-        color: white;
-        background-color: rgb(255, 145, 0);
-        width: 47px !important;
-        height: 47px !important;
-    }
-</style>
 <div id="header">
     <div class="header-top" style="background-color:  rgb(231, 237, 245)" >
-        <!-- <div class="container"> -->
-        <div class="container-header-top ">
-            <div class="">
-                <form method="get" id="searchform" action="{{ route('search') }}" style="display: flex; gap: 5px; width: 100%;">
-                    <input type="text" name="name" placeholder="Tìm theo tên..." style="padding: 5px; width: 155px; height: 47px !important">
-                    <input type="number" name="min_price" placeholder="Tìm giá lớn hơn..." @if(!empty(request()->get('min_price'))) value="{{ request()->get('min_price'); }}" @endif style="padding: 5px; height: 47px;">
-                    <input type="number" name="max_price" placeholder="Tìm giá nhỏ hơn..." @if(!empty(request()->get('max_price'))) value="{{ request()->get('max_price'); }}" @endif style="padding: 5px; height: 47px;">
-                    <button class="fa fa-search" name="submit" type="submit" id="searchsubmit"></button>
-                </form>
+        <div class="container">
+            <div class="pull-left auto-width-left">
+                        <form method="get" id="searchform" action="{{ route('search') }}" style="display: flex; gap: 5px;">
+                            <input type="text" name="name" placeholder="Tìm theo tên..." style="padding: 5px;">
+                            <input type="number" name="min_price" placeholder="Tìm giá lớn hơn..." style="padding: 5px; width: 130px;">
+                            <input type="number" name="max_price" placeholder="Tìm giá nhỏ hơn..." style="padding: 5px; width: 130px;">
+                            <button class="fa fa-search" name="submit" type="submit" id="searchsubmit"></button>
+                        </form>
             </div>
-            <div class="" style="color:#f1a417">
+            <div class="pull-right auto-width-right" style="color:#f1a417">
                 <ul class="top-details menu-beta l-inline">
                 @if(Auth::check())
 
